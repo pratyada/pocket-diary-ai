@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Rust
+target/
+Cargo.lock
+
+# Build
+dist/
+out/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vault (personal data — never commit)
+vault/
+
+# SQLite databases
+*.db
+*.db-shm
+*.db-wal
+
+# Credentials
+credentials.json
+*.key
+*.pem
+
+# Dev planning (already at root)
+dev_0.1/
