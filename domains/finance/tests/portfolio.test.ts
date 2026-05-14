@@ -68,7 +68,7 @@ describe("driftReport", () => {
 });
 
 describe("importHoldings", () => {
-  it("imports holdings from CSV", () => {
+  it("imports holdings from CSV", async () => {
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "finance-test-"));
     const csvPath = path.join(tmpDir, "holdings.csv");
 
@@ -82,7 +82,7 @@ ZAG.TO,BMO Aggregate Bond,200,15.00
       "utf-8"
     );
 
-    const result = importHoldings(db, {
+    const result = await importHoldings(db, {
       path: csvPath,
       account_id: "invest:tfsa",
       currency: "CAD",

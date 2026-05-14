@@ -157,17 +157,17 @@ export function driftReport(
   return { drift, rebalance_suggestions: suggestions };
 }
 
-export function importHoldings(
+export async function importHoldings(
   db: Database.Database,
   params: { path: string; account_id: string; currency?: "CAD" | "USD" | "INR" }
 ): { imported: number; holdings: Holding[] } {
   const currency = params.currency ?? "CAD";
   // Read CSV — expect columns: ticker/symbol, name, shares/quantity, avg_cost/book_cost
-  const fs = require("fs");
-  const { parse } = require("csv-parse/sync");
+  const fsSync = await import("fs");
+  const csvParse = await import("csv-parse/sync");
 
-  const content = fs.readFileSync(params.path, "utf-8");
-  const records = parse(content, {
+  const content = fsSync.readFileSync(params.path, "utf-8");
+  const records = csvParse.parse(content, {
     columns: true,
     skip_empty_lines: true,
     trim: true,

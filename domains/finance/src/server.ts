@@ -121,7 +121,7 @@ export async function handleToolCall(call: ToolCall): Promise<ToolResult> {
       }
 
       case "import_holdings": {
-        const result = importHoldings(db, call.params as { path: string; account_id: string; currency?: "CAD" | "USD" | "INR" });
+        const result = await importHoldings(db, call.params as { path: string; account_id: string; currency?: "CAD" | "USD" | "INR" });
         return { success: true, data: result };
       }
 
