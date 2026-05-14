@@ -1,0 +1,81 @@
+# Merchant → Category mapping rules
+# Format: normalized_merchant_name: { category, subcategory }
+# Add merchants as they're encountered. This file is the first-pass categorizer.
+# LLM fallback handles anything not here.
+
+# Groceries
+costco: { category: groceries, subcategory: bulk_store }
+walmart: { category: groceries, subcategory: supermarket }
+loblaws: { category: groceries, subcategory: supermarket }
+no_frills: { category: groceries, subcategory: supermarket }
+metro: { category: groceries, subcategory: supermarket }
+freshco: { category: groceries, subcategory: supermarket }
+real_canadian_superstore: { category: groceries, subcategory: supermarket }
+whole_foods: { category: groceries, subcategory: supermarket }
+farm_boy: { category: groceries, subcategory: supermarket }
+trader_joes: { category: groceries, subcategory: supermarket }
+dmart: { category: groceries, subcategory: supermarket }
+bigbasket: { category: groceries, subcategory: online_grocery }
+
+# Dining
+tim_hortons: { category: dining, subcategory: coffee }
+starbucks: { category: dining, subcategory: coffee }
+mcdonalds: { category: dining, subcategory: fast_food }
+subway: { category: dining, subcategory: fast_food }
+uber_eats: { category: dining, subcategory: delivery }
+skip_the_dishes: { category: dining, subcategory: delivery }
+doordash: { category: dining, subcategory: delivery }
+swiggy: { category: dining, subcategory: delivery }
+zomato: { category: dining, subcategory: delivery }
+
+# Transportation
+petro_canada: { category: transportation, subcategory: gas }
+shell: { category: transportation, subcategory: gas }
+esso: { category: transportation, subcategory: gas }
+uber: { category: transportation, subcategory: uber_lyft }
+lyft: { category: transportation, subcategory: uber_lyft }
+presto: { category: transportation, subcategory: transit }
+ttc: { category: transportation, subcategory: transit }
+ola: { category: transportation, subcategory: uber_lyft }
+indian_oil: { category: transportation, subcategory: gas }
+
+# Shopping
+amazon: { category: shopping, subcategory: amazon }
+ikea: { category: shopping, subcategory: furniture }
+canadian_tire: { category: shopping, subcategory: home_goods }
+home_depot: { category: shopping, subcategory: home_goods }
+best_buy: { category: shopping, subcategory: electronics }
+flipkart: { category: shopping, subcategory: amazon }
+myntra: { category: shopping, subcategory: clothing }
+
+# Subscriptions / SaaS
+netflix: { category: subscriptions, subcategory: streaming }
+spotify: { category: subscriptions, subcategory: streaming }
+disney_plus: { category: subscriptions, subcategory: streaming }
+apple: { category: subscriptions, subcategory: software }
+google: { category: subscriptions, subcategory: cloud }
+aws: { category: subscriptions, subcategory: cloud }
+anthropic: { category: subscriptions, subcategory: saas }
+openai: { category: subscriptions, subcategory: saas }
+github: { category: subscriptions, subcategory: software }
+notion: { category: subscriptions, subcategory: software }
+adobe: { category: subscriptions, subcategory: software }
+microsoft: { category: subscriptions, subcategory: software }
+
+# Health
+shoppers_drug_mart: { category: health, subcategory: pharmacy }
+rexall: { category: health, subcategory: pharmacy }
+goodlife: { category: health, subcategory: gym }
+apollo_pharmacy: { category: health, subcategory: pharmacy }
+
+# Child
+kumon: { category: child, subcategory: tutoring }
+
+# Insurance
+td_insurance: { category: insurance, subcategory: auto }
+intact: { category: insurance, subcategory: home }
+sun_life: { category: insurance, subcategory: life }
+
+# Transfers
+interac: { category: transfers, subcategory: e_transfer }
+wire_transfer: { category: transfers, subcategory: wire }

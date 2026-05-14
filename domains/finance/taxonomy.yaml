@@ -1,0 +1,136 @@
+# Spending category taxonomy — finance domain
+# Categories are hierarchical: category > subcategory
+# Add new categories as needed; keep the list flat enough to be useful
+
+housing:
+  - rent
+  - mortgage
+  - property_tax
+  - insurance_home
+  - maintenance
+  - utilities_electric
+  - utilities_gas
+  - utilities_water
+  - internet
+  - phone
+
+transportation:
+  - gas
+  - parking
+  - transit
+  - uber_lyft
+  - car_insurance
+  - car_maintenance
+  - car_payment
+  - tolls
+
+groceries:
+  - supermarket
+  - ethnic_grocery
+  - bulk_store
+  - farmers_market
+  - online_grocery
+
+dining:
+  - restaurants
+  - fast_food
+  - coffee
+  - delivery
+  - bars
+
+shopping:
+  - clothing
+  - electronics
+  - furniture
+  - amazon
+  - home_goods
+
+health:
+  - pharmacy
+  - dental
+  - vision
+  - doctor
+  - gym
+  - supplements
+
+child:
+  - daycare
+  - activities
+  - clothing_kids
+  - toys
+  - school
+  - tutoring
+
+subscriptions:
+  - streaming
+  - software
+  - cloud
+  - news
+  - membership
+  - saas
+
+insurance:
+  - life
+  - health
+  - auto
+  - home
+  - umbrella
+
+education:
+  - courses
+  - books
+  - certifications
+  - conferences
+
+income:
+  - salary
+  - freelance
+  - dividend
+  - interest
+  - rental
+  - refund
+  - cashback
+  - gift
+
+investments:
+  - contribution
+  - withdrawal
+  - dividend_reinvest
+  - fee
+
+transfers:
+  - internal
+  - external
+  - wire
+  - e_transfer
+
+fees:
+  - bank_fee
+  - atm_fee
+  - fx_fee
+  - late_fee
+  - annual_fee
+
+travel:
+  - flights
+  - hotels
+  - car_rental
+  - activities_travel
+  - travel_insurance
+
+personal:
+  - gifts
+  - charity
+  - personal_care
+  - entertainment
+  - hobbies
+
+business:
+  - tools
+  - hosting
+  - marketing
+  - contractor
+  - office
+
+uncategorized:
+  - unknown
