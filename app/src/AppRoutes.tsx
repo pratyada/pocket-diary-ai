@@ -15,6 +15,7 @@ import Rewards from './pages/Rewards';
 import Settings from './pages/Settings';
 import Skills from './pages/Skills';
 import Welcome from './pages/Welcome';
+import Finance from './pages/Finance';
 
 const AppRoutes = () => {
   return (
@@ -119,6 +120,15 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute requireAuth={true}>
             <Rewards />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/finance"
+        element={
+          <ProtectedRoute requireAuth={true}>
+            <Finance />
           </ProtectedRoute>
         }
       />
