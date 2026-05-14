@@ -116,3 +116,6 @@ dev_0.1/
 # Rust build artifacts
 Cargo.lock
 out/
+
+# Life-OS packages build output
+packages/target/
