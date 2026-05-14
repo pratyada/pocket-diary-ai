@@ -1,6 +1,6 @@
-# pkg-schema.md — Personal Knowledge Graph Schema
+# pkg-schema.md — Pocket Diary AI: Personal Knowledge Graph Schema
 
-> Crate: `packages/pkg-graph/` | Database: `pkg.db` (SQLite, WAL mode)
+> Crate: `packages/pkg-graph/` | Database: `pkg.db` (SQLite, WAL mode) | Part of [Pocket Diary AI](https://github.com/pratyada/pocket-diary-ai)
 
 ---
 

@@ -2,7 +2,7 @@
 name = "pkg-graph"
 version = "0.1.0"
 edition = "2021"
-description = "Personal Knowledge Graph — SQLite-backed node/edge store with event journaling"
+description = "Pocket Diary AI — Personal Knowledge Graph, SQLite-backed node/edge store with event journaling"
 
 [dependencies]
 rusqlite = { version = "0.37", features = ["bundled"] }

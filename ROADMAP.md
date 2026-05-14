@@ -1,144 +1,108 @@
-# ROADMAP.md — Build order, wave by wave
+# ROADMAP.md — Pocket Diary AI build order, wave by wave
 
 Each wave ends with a working, used-by-me-daily slice. Don't start wave N+1 until I've used wave N for a full week and the bugs are bled out.
 
 ---
 
-## Wave 0 — Spine (week 1)
+## Wave 0 — Spine (DONE)
 
-The plumbing every domain depends on. No user-visible feature; without this, nothing else works.
+The plumbing every domain depends on.
 
-- [ ] Fork `tinyhumansai/openhuman` to `openhuman-prateek`
-- [ ] Read upstream `AGENTS.md`, `CLAUDE.md`, `docs/`
-- [ ] Add `packages/pkg-graph/` (Rust): node/edge CRUD, SQLite migrations, query helpers (find by type, neighbors, path)
-- [ ] Add `packages/event-bus/` (Rust): `tokio::sync::broadcast` wrapper + persistent journal table
-- [ ] Add `packages/domain-sdk/` (TS): base class for MCP domain servers, vault writer, PKG client over IPC
+- [x] Set up repository with planning docs
+- [x] Add `packages/pkg-graph/` (Rust): node/edge CRUD, SQLite migrations, query helpers, `cargo test` (21 tests)
+- [ ] Add `packages/event-bus/` (Rust): bridge to substrate event bus + persistent journal
+- [ ] Add `packages/domain-sdk/` (TS): base class for MCP domain servers
 - [ ] Add `packages/cascade-inbox/` (UI): list view + approve/reject/edit
-- [ ] Add `CLAUDE.md` at repo root with house rules for Claude Code (paths, schemas, no upstream edits)
 - [ ] Set up `pnpm` workspace to include `domains/*`
 - [ ] CI: lint, type-check, unit tests on push
 
-**Done when:** I can run `pnpm run dev`, see OpenHuman boot, see an empty Cascade Inbox tab, and call a stub MCP domain that writes one node + emits one event that the inbox shows.
-
 ---
 
-## Wave 1 — Daily-pain domains (weeks 2–4)
+## Wave 1 — Daily-pain domains (in progress)
 
-The three that pay back fastest.
-
-### 1.1 `domains/finance/`
-- [ ] PDF statement ingestion: accepts a folder, classifies bank/card, extracts transactions
-- [ ] LLM-backed categorizer with confidence; low-confidence rows queued for my review
-- [ ] Monthly cash-flow report → `vault/domains/finance/2026-MM.md`
-- [ ] Anomaly detection (>2σ vs. 6-month rolling for that merchant category)
-- [ ] Emits `transaction.imported`, `anomaly.detected`
-- [ ] MCP tools: `import_statement`, `query_spending(period, category)`, `monthly_report(month)`
+### 1.1 `domains/finance/` (DONE)
+- [x] PDF/CSV statement parsing (RBC, TD, BMO, HDFC, SBI, Chase + generic)
+- [x] Two-stage categorization (rules YAML + LLM fallback)
+- [x] Monthly cash-flow reports to vault
+- [x] Anomaly detection (>2sigma vs rolling average)
+- [x] Portfolio tracking (TFSA, RRSP, RESP, brokerage)
+- [x] Market data feeds (NASDAQ, TSX, NIFTY via Yahoo Finance)
+- [x] Allocation drift analysis + rebalance suggestions
+- [x] Mistake journal with pattern analysis
+- [x] Multi-currency (CAD/USD/INR) with FX conversion
+- [x] Where-to-invest tax efficiency analysis
+- [x] Net worth aggregation across Canada/India/US
+- [x] Expense forecasting
+- [x] 15 MCP tools, 19 tests passing
 
 ### 1.2 `domains/subscriptions/`
-- [ ] Listens to `transaction.imported`; pattern-matches recurring charges
-- [ ] Cross-references Gmail receipts (via OpenHuman's Gmail integration)
-- [ ] Detects: overlap (paying twice for same category), zombie (charged but no usage signal), renewal next 14 days
-- [ ] Proposes node creation/update via Cascade Inbox
-- [ ] MCP tools: `list_subs`, `find_unused`, `upcoming_renewals(days)`
+- [ ] Listen to `transaction.recurring_detected` from finance
+- [ ] Cross-reference Gmail receipts
+- [ ] Detect overlaps, zombies, upcoming renewals
+- [ ] MCP tools: `list_subs`, `find_unused`, `upcoming_renewals`
 
 ### 1.3 `domains/secrets/`
-- [ ] **No password storage.** Reads metadata from Bitwarden CLI (or 1Password CLI)
-- [ ] Calls HaveIBeenPwned for each domain
-- [ ] Tracks last-rotation date; surfaces "rotate now" list (>365 days, breached, or critical)
+- [ ] **No password storage.** Reads metadata from Bitwarden/1Password CLI
+- [ ] HaveIBeenPwned breach check
+- [ ] Rotation tracking + weekly "rotate these" digest
 - [ ] MCP tools: `rotation_status`, `breach_check`, `weakness_report`
-- [ ] Cascade: emits `secret.rotation_due` weekly; never reads or writes passwords
 
-**Done when:** I drop a folder of last year's statements in, get a vault file with monthly cash-flow, see Subscriptions auto-detect at least 80% of my recurring charges, and get a weekly "rotate these 3 credentials" notification.
+**Done when:** I drop statements, get cash-flow reports, see subscriptions auto-detected, and get weekly credential rotation reminders.
 
 ---
 
-## Wave 2 — Wealth + work (weeks 5–8)
+## Wave 2 — Wealth + work (planned)
 
 ### 2.1 `domains/invest/`
-- [ ] CSV import from brokerages (Wealthsimple, IBKR, etc.)
-- [ ] Daily price refresh via yfinance + Alpha Vantage fallback
-- [ ] Allocation drift vs. target (I set the target manually)
-- [ ] **Mistake journal:** every closed position I tag with "what I'd do differently"; LLM clusters patterns quarterly
-- [ ] Watchlist with threshold alerts (price, P/E, news)
-- [ ] **No trade execution.** Surfaces signals only.
-- [ ] MCP tools: `portfolio`, `drift`, `watchlist`, `mistake_journal`, `news_for(ticker)`
+- [ ] Brokerage CSV import, daily price refresh
+- [ ] Allocation drift vs target
+- [ ] Mistake journal clustering (quarterly)
+- [ ] Watchlist with threshold alerts
 
 ### 2.2 `domains/tasks/`
-- [ ] Daily standup: today's calendar + top 3 tasks + overdue items
-- [ ] Weekly review: what got done, what slipped, energy/focus patterns
-- [ ] Pulls from Calendar + Gmail (action items) + Notion
-- [ ] MCP tools: `today`, `upcoming(days)`, `weekly_review`
+- [ ] Daily standup: today's calendar + top 3 tasks + overdue
+- [ ] Weekly review: done, slipped, energy patterns
+- [ ] Gmail + Calendar + Notion integration
 
 ### 2.3 `domains/career/`
-- [ ] Manual LinkedIn profile export → parsed to PKG
-- [ ] I set a target role/level; agent does gap analysis vs. current
-- [ ] Quarterly "what to do next" memo
-- [ ] Watches relevant job feeds for fit
-- [ ] MCP tools: `gap_analysis`, `quarterly_memo`, `opportunity_match`
-
-**Done when:** I have a daily standup at 8am, a weekly portfolio drift report Sunday night, and a quarterly career memo I actually act on.
+- [ ] LinkedIn export parsing
+- [ ] Gap analysis vs target role
+- [ ] Quarterly career memo
 
 ---
 
-## Wave 3 — Family + ventures (weeks 9–14)
+## Wave 3 — Family + ventures (planned)
 
 ### 3.1 `domains/child/` (Ved)
-- [ ] **Local model only** (Ollama). No cloud LLM unless I explicitly approve a single task.
-- [ ] Schedule manager (ukulele, drums, swimming, biking, taekwondo)
-- [ ] Milestone log: skill grades, school achievements, health notes
-- [ ] Weekly summary to me/partner only
-- [ ] Habit tracker for the things I want to instill (reading, water, kindness journal)
-- [ ] **No third-party API ever sees school name + full name + schedule together.**
-- [ ] MCP tools: `weekly_summary`, `log_milestone`, `schedule(day)`, `suggest_activity`
+- [ ] **Local model only** (Ollama). No cloud LLM.
+- [ ] Schedule manager, milestone log, habit tracker
+- [ ] Weekly summary to me/partner
 
-### 3.2 `domains/ventures/` (10 IG accounts)
-- [ ] Instagram Graph API integration (requires business accounts via Meta app)
-- [ ] Weekly per-account: reach, engagement, top post, drop alerts
-- [ ] Content gap detection (themes underperforming across accounts)
-- [ ] MCP tools: `weekly_perf(account)`, `content_gap`, `posting_cadence`
+### 3.2 `domains/ventures/` (IG accounts)
+- [ ] Instagram Graph API, weekly per-account performance
+- [ ] Content gap detection
 
 ### 3.3 `domains/startups/`
-- [ ] GitHub + Linear/Jira integration (via OpenHuman)
-- [ ] One PKG node per project with a "north star metric"
-- [ ] Weekly health: commits, open issues, last user touch, north-star delta
-- [ ] MCP tools: `project_health`, `north_star(project)`, `quarterly_review`
-
-**Done when:** I get a Sunday family digest (Ved's week + planned next week), Monday venture digest (10 IG accounts), and Friday startup digest.
+- [ ] GitHub + Linear integration
+- [ ] North-star metric tracking
 
 ---
 
-## Wave 4 — The rest (weeks 15+)
+## Wave 4 — The rest (planned)
 
-### 4.1 `domains/health/`
-- [ ] Apple Health / Google Fit import
-- [ ] Quick-entry CLI: `oh log water 500ml`, `oh log protein 30g`
-- [ ] Weekly trend, deficit/surplus on protein and key vitamins
-- [ ] **No medical diagnosis.** Flags "talk to doctor" thresholds.
-
-### 4.2 `domains/equipment/`
-- [ ] PKG nodes for car, bike, laptops, expensive gear
-- [ ] Service intervals → calendar reminders via Cascade Inbox
-- [ ] Issues register (Markdown notes per item)
-- [ ] Warranty expiry alerts
-
-### 4.3 `domains/family-time/`
-- [ ] Reads calendar + equipment.vehicle + weather
-- [ ] "We haven't done X in N weeks" nudges
-- [ ] Holiday/long-weekend planner with rough cost estimate from finance
-
-### 4.4 `domains/brand/` (yprateek.com)
-- [ ] Plausible/GA analytics import
-- [ ] Content pipeline (drafts → scheduled → live), linked to career + ventures
-- [ ] Audience report monthly
+- `domains/health/` — Apple Health import, intake logging
+- `domains/equipment/` — Service intervals, warranty alerts
+- `domains/family-time/` — Activity suggestions, weather-aware planning
+- `domains/brand/` — yprateek.com analytics, content pipeline
 
 ---
 
 ## After Wave 4 — Hardening
 
-- Backup/restore of SQLite + vault (encrypted off-site)
-- Mobile companion (Tauri mobile or a thin Flutter app) for quick-entry domains (health, family-time)
-- Cross-domain "ask anything" prompt that fans out: "How are we doing this month?" → finance + invest + career + family-time
-- Quarterly self-review: agent reads vault, drafts a "state of Prateek" doc
+- Encrypted backup/restore of SQLite + vault
+- Mobile companion for quick-entry (health, family-time)
+- Cross-domain "ask anything" prompt
+- Quarterly self-review: "state of Prateek" doc
 
 ---
 
@@ -146,7 +110,6 @@ The three that pay back fastest.
 
 - Auto-place trades
 - Store passwords
-- Send messages on my behalf without explicit per-message approval
+- Send messages on my behalf without per-message approval
 - Send Ved's data to cloud LLMs
 - Skip the Cascade Inbox for money-affecting actions
-- Merge upstream into my fork without a quarterly rebase ritual

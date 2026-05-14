@@ -1,121 +1,144 @@
-<h1 align="center">OpenHuman</h1>
+# Pocket Diary AI
 
-<p align="center">
- <img src="./gitbooks/.gitbook/assets/demo.png" alt="The Tet" />
-</p>
+**A private, local-first life operating system -- 13 AI agents that connect every corner of your life.**
 
-<p align="center" style="display: inline-block">
- <a href="https://trendshift.io/repositories/23680" target="_blank" style="display: inline-block">
-  <img src="https://trendshift.io/api/badge/repositories/23680" alt="tinyhumansai%2Fopenhuman | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/>
- </a>
-</p>
+Pocket Diary AI is a personal command center built as a desktop app. It tracks finances across three countries, monitors investments, coaches credential hygiene, manages family schedules, and surfaces insights you'd never see looking at each area in isolation.
 
-<p align="center">
- <strong>OpenHuman is your Personal AI super intelligence. Private, Simple and extremely powerful.</strong>
-</p>
+Everything stays on your machine. The AI proposes, you approve. No cloud, no SaaS, no shared data.
 
+Inspired by [OpenHuman](https://github.com/tinyhumansai/openhuman).
 
-<p align="center">
- <a href="https://discord.tinyhumans.ai/">Discord</a> •
- <a href="https://www.reddit.com/r/tinyhumansai/">Reddit</a> •
- <a href="https://x.com/intent/follow?screen_name=tinyhumansai">X/Twitter</a> •
- <a href="https://tinyhumans.gitbook.io/openhuman/">Docs</a> •
- <a href="https://x.com/intent/follow?screen_name=senamakel">Follow @senamakel (Creator)</a>
-</p>
+---
 
-<p align="center">
- <img src="https://img.shields.io/badge/status-early%20beta-orange" alt="Early Beta" />
- <a href="https://github.com/tinyhumansai/openhuman/releases/latest"><img src="https://img.shields.io/github/v/release/tinyhumansai/openhuman?label=latest" alt="Latest Release" /></a>
-</p>
+## What it does
 
-> **Early Beta**: Under active development. Expect rough edges.
+| Domain | Status | What it handles |
+|--------|--------|----------------|
+| **Finance** | Built | Bank statement import (PDF/CSV), spending analysis, investments (TFSA/RRSP/RESP), market data (NASDAQ/TSX/NIFTY), mistake journal, multi-currency (CAD/USD/INR), monthly reports |
+| Subscriptions | Planned | Auto-detect recurring charges, zombie subscriptions, renewal alerts |
+| Secrets | Planned | Credential rotation coaching, breach monitoring (never stores passwords) |
+| Invest | Planned | Portfolio drift, watchlist alerts, mistake pattern analysis |
+| Tasks | Planned | Daily standup, weekly review, calendar/email/Notion integration |
+| Career | Planned | Gap analysis, opportunity matching, quarterly career memos |
+| Child | Planned | Schedule, milestones, habits (local AI only, never cloud) |
+| Ventures | Planned | Instagram analytics for business accounts |
+| Startups | Planned | GitHub/Linear tracking, north-star metrics |
+| Health | Planned | Apple Health import, intake logging, weekly trends |
+| Equipment | Planned | Service intervals, warranty alerts |
+| Family Time | Planned | Activity suggestions, weather-aware planning |
+| Brand | Planned | Website analytics, content pipeline |
 
-To install or get started, either download from the website over at [tinyhumans.ai/openhuman](https://tinyhumans.ai/openhuman?utm_source=github&utm_medium=readme) or run
+---
+
+## Architecture
 
 ```
-# Download DMG, EXEs over at https://tinyhumans.ai/openhuman?utm_source=github&utm_medium=readme or run in from your terminal
-
-# For macOS or Linux x64
-curl -fsSL https://raw.githubusercontent.com/tinyhumansai/openhuman/main/scripts/install.sh | bash
-
-# For Windows
-irm https://raw.githubusercontent.com/tinyhumansai/openhuman/main/scripts/install.ps1 | iex
++--------------------------------------------------------------+
+| Desktop App (Tauri + React)                                  |
++--------------------------------------------------------------+
+| Domain Agents (MCP servers, one per life area)               |
++--------------------------------------------------------------+
+| Event Bus (cross-domain reactions, audited)                  |
++--------------------------------------------------------------+
+| Personal Knowledge Graph (nodes + edges in SQLite)           |
++--------------------------------------------------------------+
+| Local-first substrate (SQLite, Obsidian vault, model router) |
++--------------------------------------------------------------+
 ```
 
-# What is OpenHuman?
+**Personal Knowledge Graph** -- Everything is a node (`person:prateek`, `account:rbc-chequing`, `holding:tsla`, `sub:netflix`). Relationships are edges (`owns`, `pays_for`, `parent_of`). All in SQLite, all on your machine.
 
-OpenHuman is an open-source agentic assistant designed to integrate with you in your daily life. Each bullet links to the deeper writeup in the [docs](https://tinyhumans.gitbook.io/openhuman/).
+**Event Bus** -- When Finance imports a transaction, Subscriptions detects a recurring charge. When a credential ages past a year, Secrets flags it. Domains react to each other without coupling.
 
-- **Simple, UI-first & Human** A clean desktop experience and short onboarding paths take you from install to a working agent in a few clicks — no config-first setup, no terminal required. The agent has [a face](https://tinyhumans.gitbook.io/openhuman/features/mascot): a desktop mascot that speaks, reacts to its surroundings, [joins your Google Meets](https://tinyhumans.gitbook.io/openhuman/features/mascot/meeting-agents) as a real participant, remembers you across weeks, and keeps thinking in the background even when you've stopped typing.
+**Cascade Inbox** -- Any action touching money, family, or external systems requires your approval. The AI proposes, you decide.
 
-- **[118+ third-party integrations](https://tinyhumans.gitbook.io/openhuman/features/integrations) with [auto-fetch](https://tinyhumans.gitbook.io/openhuman/features/obsidian-wiki/auto-fetch)**: plug into Gmail, Notion, GitHub, Slack, Stripe, Calendar, Drive, Linear, Jira and the rest of your stack with **one-click OAuth**. Every connection is exposed to the agent as a typed tool, and every twenty minutes the core walks each active connection and pulls fresh data into the [memory tree](https://tinyhumans.gitbook.io/openhuman/features/integrations/auto-fetch). No prompts, no polling loops you have to write, so the agent already has tomorrow's context this morning.
+---
 
-- **[Memory Tree](https://tinyhumans.gitbook.io/openhuman/features/memory-tree) + [Obsidian Wiki](https://tinyhumans.gitbook.io/openhuman/features/obsidian-wiki)**: a local-first knowledge base built from your data and your activity. Everything you connect is canonicalized into ≤3k-token Markdown chunks, scored, and folded into hierarchical summary trees stored in **SQLite on your machine**. The same chunks land as `.md` files in an Obsidian-compatible vault you can open, browse and edit, inspired by Karpathy's [obsidian-wiki workflow](https://x.com/karpathy/status/2039805659525644595).
+## Tech stack
 
-- **Batteries included**: web search, a web-fetch [scraper](https://tinyhumans.gitbook.io/openhuman/features/native-tools), a full coder toolset (filesystem, git, lint, test, grep), and [native voice](https://tinyhumans.gitbook.io/openhuman/features/voice) (STT in, ElevenLabs TTS out, mascot lip-sync, live Google Meet agent) are wired in by default. [Model routing](https://tinyhumans.gitbook.io/openhuman/features/model-routing) sends each task to the right LLM (reasoning, fast, or vision) under one subscription. No "install a plugin to read files" friction. [Optional local AI via Ollama](https://tinyhumans.gitbook.io/openhuman/features/model-routing/local-ai) for on-device workloads.
+| Layer | Technology |
+|-------|-----------|
+| Desktop | Tauri v2 + React 19 |
+| Core | Rust (2021 edition) |
+| Knowledge Graph | Rust crate (`packages/pkg-graph/`), SQLite |
+| Domain agents | TypeScript, zod schemas, vitest |
+| Market data | Yahoo Finance (NASDAQ, TSX, NIFTY) |
+| Database | SQLite (WAL mode, local-first) |
+| Vault | Obsidian-compatible Markdown |
+| AI routing | Local (Ollama) + Cloud (Anthropic) with privacy classes |
 
-- **[Smart token compression (TokenJuice)](https://tinyhumans.gitbook.io/openhuman/features/token-compression)**: every tool call, scrape result, email body, and search payload is run through a token compression layer before it touches any LLM Model. HTML is converted to Markdown, long URLs are shortened, non-ASCII characters are removed etc... You get the same information but at a fraction of the tokens. Reducing cost &amp; latency by up to 80%.
+---
 
-- **[Messaging channels](https://tinyhumans.gitbook.io/openhuman/features/integrations#messaging-channels)** and **[privacy & security](https://tinyhumans.gitbook.io/openhuman/features/privacy-and-security)**: inbound/outbound across the channels you already use, with workflow data that stays on device, encrypted locally, treated as yours.
+## Getting started
 
-## Contributing from source
+```bash
+# Clone
+git clone git@github.com:pratyada/pocket-diary-ai.git
+cd pocket-diary-ai
 
-New contributor? Start with [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the fork/PR workflow and local validation commands. The short path is:
+# Substrate (desktop app)
+pnpm install
+pnpm dev
 
-1. Install Git, Node.js 24+, pnpm 10.10.0, Rust 1.93.0 (`rustfmt` + `clippy`), CMake, and the platform desktop build prerequisites.
-2. Fork and clone the repo, then run `git submodule update --init --recursive` before `pnpm install` so the vendored Tauri/CEF sources are present.
-3. Use `pnpm dev` for web-only UI work, `pnpm --filter openhuman-app dev:app` for the desktop shell, and focused checks such as `pnpm typecheck`, `pnpm format:check`, and `cargo check -p openhuman --lib` before opening a PR.
+# Pocket Diary AI packages (knowledge graph)
+cd packages && cargo test
 
-Deeper docs: [Architecture](https://tinyhumans.gitbook.io/openhuman/developing/architecture) · [Getting Set Up](https://tinyhumans.gitbook.io/openhuman/developing/getting-set-up) · [Cloud Deploy](./gitbooks/features/cloud-deploy.md).
+# Finance domain
+cd domains/finance
+npm install
+npm test
+```
 
-## Context in minutes, not weeks
+---
 
-OpenHuman is the first agent harness that gets to know you in minutes. Inspired by [Karpathy's LLM Knowledgebase](https://x.com/karpathy/status/2039805659525644595). Most agents start cold. Hermes learns by watching you work; OpenClaw waits for plugins to ferry context in. Either way, you spend days or weeks before the agent knows enough about your stack to be genuinely useful.
+## Project structure
 
-<p align="center">
- <img src="./gitbooks/.gitbook/assets/image (1).png" />
-</p>
+```
+pocket-diary-ai/
++-- packages/
+|   +-- pkg-graph/              -- Personal Knowledge Graph (Rust, 21 tests)
++-- domains/
+|   +-- finance/                -- Finance domain (TS, 15 tools, 19 tests)
+|       +-- SKILL.md            -- Domain spec
+|       +-- schemas/            -- zod schemas
+|       +-- src/                -- MCP server + handlers
+|       +-- tests/              -- vitest tests
++-- vault/                      -- Obsidian vault (gitignored, personal data)
++-- docs/                       -- Architecture docs
++-- src/                        -- Substrate Rust core
++-- app/                        -- Desktop app (Tauri + React)
+```
 
-> OpenHuman summarizes and compresses all your documents, emails & chats; and creates a memory graph that lets your agent remember everything about you.
+---
 
-OpenHuman skips the wait. Connect your accounts, let [auto-fetch](https://tinyhumans.gitbook.io/openhuman/features/integrations/auto-fetch) pull data locally on a 20-minute loop, and then have [Memory Trees](https://tinyhumans.gitbook.io/openhuman/features/memory-tree) compress everything into Markdown files stored intelligently in a [Karpathy-style Obsidian wiki](https://tinyhumans.gitbook.io/openhuman/features/obsidian-wiki).
+## Principles
 
-In just one sync pass, the agent has full (compressed) context of your inbox, your calendar, your repos, your docs, your messages. No training period. No "give it a few weeks.". It becomes you, controlled by you.
+1. **Local-first** -- Nothing leaves your machine without explicit approval
+2. **Human-in-the-loop** -- Money, family, and external actions go through the Cascade Inbox
+3. **No password storage** -- The secrets domain coaches rotation, never touches passwords
+4. **No autonomous trading** -- Investment domain surfaces signals, you place orders
+5. **Child data is sacred** -- Processed on local models only, never sent to cloud
+6. **Audit trail** -- Every change is journaled to SQLite
+7. **Schemas over vibes** -- Every domain validates I/O with zod or serde
 
-## OpenHuman vs Other Agent Harnesses
+---
 
-High-level comparison (products evolve, so verify against each vendor). OpenHuman is built to **minimize vendor sprawl**, keep **workflow knowledge on-device**, and give the agent a **persistent memory** of your data, not only chat.
+## Privacy model
 
-|                     | Claude Cowork     | OpenClaw          | Hermes Agent      | OpenHuman                          |
-| ------------------- | ----------------- | ----------------- | ----------------- | ---------------------------------- |
-| **Open-source**     | 🚫 Proprietary    | ✅ MIT            | ✅ MIT            | ✅ GNU                             |
-| **Simple to start** | ✅ Desktop + CLI  | ⚠️ Terminal-first | ⚠️ Terminal-first | ✅ Clean UI, minutes               |
-| **Cost**            | ⚠️ Sub + add-ons  | ⚠️ BYO models     | ⚠️ BYO models     | ✅ One sub + TokenJuice            |
-| **Memory**          | ✅ Chat-scoped    | ⚠️ Plugin-reliant | ✅ Self-learning  | 🚀 Memory Tree + Obsidian vault    |
-| **Integrations**    | ⚠️ Few connectors | ⚠️ BYO            | ⚠️ BYO            | 🚀 118+ via OAuth                  |
-| **Auto-fetch**      | 🚫 None           | 🚫 None           | 🚫 None           | ✅ 20-min sync into memory         |
-| **API sprawl**      | 🚫 Extra keys     | 🚫 BYOK           | 🚫 Multi-vendor   | ✅ One account                     |
-| **Model routing**   | 🚫 Single model   | ⚠️ Manual         | ⚠️ Manual         | ✅ Built-in                        |
-| **Native tools**    | ✅ Code-only      | ✅ Code-only      | ✅ Code-only      | ✅ Code + search + scraper + voice |
+| Class | What it means | Domains |
+|-------|--------------|---------|
+| `cloud-ok` | Can use cloud AI after data compression | tasks, brand, career |
+| `local-preferred` | Local model first, cloud only if needed | finance, invest, subs, equipment, family-time, ventures, startups |
+| `local-only` | Never leaves the machine | child, secrets, health |
 
-# Star us on GitHub
+---
 
-_Building toward AGI and artificial consciousness? Star the repo and help others find the path._
+## Built by
 
-<p align="center">
- <a href="https://www.star-history.com/#tinyhumansai/openhuman&type=date&legend=top-left">
- <picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=tinyhumansai/openhuman&type=date&theme=dark&legend=top-left" />
- <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=tinyhumansai/openhuman&type=date&legend=top-left" />
- <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=tinyhumansai/openhuman&type=date&legend=top-left" />
- </picture>
- </a>
-</p>
+**Prateek Yadav** -- Toronto, Canada
 
-# Contributors Hall of Fame
+Inspired by [OpenHuman](https://github.com/tinyhumansai/openhuman).
 
-Show some love and end up in the hall of fame. Contributors get free merch and special access to our [Discord](https://discord.tinyhumans.ai/).
+---
 
-<a href="https://github.com/tinyhumansai/openhuman/graphs/contributors">
- <img src="https://contrib.rocks/image?repo=tinyhumansai/openhuman" alt="OpenHuman contributors" />
-</a>
+*Pocket Diary AI is a personal project. It's not a SaaS, not multi-tenant, not for distribution. It grows with one life.*

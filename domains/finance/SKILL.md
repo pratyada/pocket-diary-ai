@@ -1,4 +1,4 @@
-# SKILL.md — Finance Domain
+# SKILL.md — Finance Domain (Pocket Diary AI)
 
 > **Purpose:** Track all financial activity across Canada, India, and US — accounts, investments, expenses, portfolios, and market positions — for Prateek and his wife, with learning from past mistakes.
 
